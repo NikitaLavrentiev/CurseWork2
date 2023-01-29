@@ -1,8 +1,8 @@
 package Tasks;
 
+import java.time.LocalDateTime;
+
 public interface Repeatable {
 
-    void Repeatable();
-
-
+    LocalDateTime repeat(LocalDateTime dateTime);
 }

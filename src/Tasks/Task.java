@@ -1,41 +1,51 @@
 package Tasks;
 
 import exeptions.IllegalParemetrtException;
-
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Task {
+public abstract class Task implements Repeatable {
     /*В ежедневник можно заносить задачи, можно удалять их, можно получать список задач на предстоящий день.
 
 Каждая задача обязательно имеет заголовок. У каждой задачи может быть поле для описания.
 Также все задачи обязательно нужно делить по типу: личные или рабочие задачи. У каждой задачи есть дата и время, которые были присвоены при создании.*/
     private String title;
-    private final TaskType taskType;
-    private final LocalDateTime taskTime;
+    private TaskType taskType;
+    private LocalDateTime taskTime;
     private String description;
-    private final int id;
+    private final Integer ID;
     private static int counter = 1;
 
     public Task(String title, String description, TaskType taskType, LocalDateTime taskTime) throws IllegalParemetrtException {
         setTitle(title);
         setDescription(description);
+        setTaskType(taskType);
+setTaskTime(taskTime);
+        this.ID = counter;
+        counter++;
+    }
+    //создать метод добавить таск и удалить таск
+    //добавить интерфейс, чтобы переопределить значения для того что у меня в енамах и можно было поведение выставить
+
+    public void setTaskType(TaskType taskType) throws IllegalParemetrtException{
         if (taskType != null) {
             this.taskType = taskType;
         } else {
             throw new IllegalParemetrtException(" Тип задания ");
         }
+    }
+
+    public void setTaskTime(LocalDateTime taskTime) throws IllegalParemetrtException{
         if (taskTime != null) {
             this.taskTime = taskTime;
         } else {
             throw new IllegalParemetrtException(" Время задания ");
         }
-
-        this.id = counter;
-        counter++;
     }
-    //создать метод дабавить таск и удалить таск
-    //добавить интерфейс, чтобы переопределить значения для того что у меня в енамах и можно было поведение выставить
+
+    public Integer getID() {
+        return ID;
+    }
 
     public TaskType getTaskType() {
         return taskType;
@@ -45,7 +55,7 @@ public class Task {
         return taskTime;
     }
 
-    public static void setCounter(int counter) {
+    public static void setCounter(Integer counter) {
         Task.counter = counter;
     }
 
@@ -65,9 +75,6 @@ public class Task {
         return counter;
     }
 
-    public int getId() {
-        return id;
-    }
 
     public String getDescription() {
         return description;
@@ -81,21 +88,29 @@ public class Task {
         }
     }
 
-    //оверрайд ту стинг (тегулярная булин на печать для типов ворк или прайвет таск)
+    @Override
+    public String toString() {
+        return "Задние номер " + ID +
+                " название " + title +
+                ", тип " + taskType +
+                ", время создания " + taskTime +
+                ", описание " + description;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Task)) return false;
         Task task = (Task) o;
-        return id == task.id && Objects.equals(title, task.title) && taskType == task.taskType && Objects.equals(taskTime, task.taskTime) && Objects.equals(description, task.description);
+        return title.equals(task.title) && taskType == task.taskType && taskTime.equals(task.taskTime) && description.equals(task.description) && ID.equals(task.ID);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, taskType, taskTime, description, id);
+        return Objects.hash(title, taskType, taskTime, description, ID);
     }
-/*    enum RepetitionRate {
+
+    /*    enum RepetitionRate {
 
         ONCE("однократная"),
         EVERYDAY("ежедневная"),
