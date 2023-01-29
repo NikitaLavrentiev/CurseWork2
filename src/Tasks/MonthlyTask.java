@@ -11,7 +11,7 @@ public class MonthlyTask extends Task implements Repeatable {
     }
 
     @Override
-    public LocalDateTime repeat(LocalDateTime dateTime) {
+    public LocalDateTime getRepeatTime(LocalDateTime dateTime) {
         return dateTime.plusMonths(1);
     }
 }

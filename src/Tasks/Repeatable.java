@@ -4,5 +4,5 @@ import java.time.LocalDateTime;
 
 public interface Repeatable {
 
-    LocalDateTime repeat(LocalDateTime dateTime);
+    LocalDateTime getRepeatTime(LocalDateTime dateTime);
 }

@@ -1,14 +1,11 @@
 package Tasks;
 
 import exeptions.IllegalParemetrtException;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 public abstract class Task implements Repeatable {
-    /*В ежедневник можно заносить задачи, можно удалять их, можно получать список задач на предстоящий день.
-
-Каждая задача обязательно имеет заголовок. У каждой задачи может быть поле для описания.
-Также все задачи обязательно нужно делить по типу: личные или рабочие задачи. У каждой задачи есть дата и время, которые были присвоены при создании.*/
     private String title;
     private TaskType taskType;
     private LocalDateTime taskTime;
@@ -20,14 +17,12 @@ public abstract class Task implements Repeatable {
         setTitle(title);
         setDescription(description);
         setTaskType(taskType);
-setTaskTime(taskTime);
+        setTaskTime(taskTime);
         this.ID = counter;
         counter++;
     }
-    //создать метод добавить таск и удалить таск
-    //добавить интерфейс, чтобы переопределить значения для того что у меня в енамах и можно было поведение выставить
 
-    public void setTaskType(TaskType taskType) throws IllegalParemetrtException{
+    public void setTaskType(TaskType taskType) throws IllegalParemetrtException {
         if (taskType != null) {
             this.taskType = taskType;
         } else {
@@ -35,7 +30,7 @@ setTaskTime(taskTime);
         }
     }
 
-    public void setTaskTime(LocalDateTime taskTime) throws IllegalParemetrtException{
+    public void setTaskTime(LocalDateTime taskTime) throws IllegalParemetrtException {
         if (taskTime != null) {
             this.taskTime = taskTime;
         } else {
@@ -109,27 +104,4 @@ setTaskTime(taskTime);
     public int hashCode() {
         return Objects.hash(title, taskType, taskTime, description, ID);
     }
-
-    /*    enum RepetitionRate {
-
-        ONCE("однократная"),
-        EVERYDAY("ежедневная"),
-        EVERY_WEEK("еженедельная"),
-        EVERY_MONTH("ежемесячная"),
-        EVERY_YEAR("ежегодная");
-        private final String repeatability;
-
-        RepetitionRate(String repeatability) {
-            this.repeatability = repeatability;
-        }
-
-        public String getRepeatability() {
-            return repeatability;
-        }
-
-        @Override
-        public String toString() {
-            return " частота повторений " + repeatability + ", ";
-        }
-    }*/
 }

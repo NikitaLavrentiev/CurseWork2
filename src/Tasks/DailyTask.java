@@ -11,7 +11,8 @@ public class DailyTask extends Task{
     }
 
     @Override
-    public LocalDateTime repeat(LocalDateTime dateTime) {
+    public LocalDateTime getRepeatTime(LocalDateTime dateTime) {
         return dateTime.plusDays(1);
     }
+
 }
