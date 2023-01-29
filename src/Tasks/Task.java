@@ -1,51 +1,64 @@
 package Tasks;
 
-import java.time.Clock;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import exeptions.IllegalParemetrtException;
 
-public abstract class Task {
+import java.time.LocalDateTime;
+import java.util.Objects;
+
+public class Task {
     /*В ежедневник можно заносить задачи, можно удалять их, можно получать список задач на предстоящий день.
 
 Каждая задача обязательно имеет заголовок. У каждой задачи может быть поле для описания.
 Также все задачи обязательно нужно делить по типу: личные или рабочие задачи. У каждой задачи есть дата и время, которые были присвоены при создании.*/
     private String title;
-    private final boolean isItPrivateTask;
-    private final String creationDate;
-    private final String creationTime;
+    private final TaskType taskType;
+    private final LocalDateTime taskTime;
     private String description;
     private final int id;
-    private static int counter;
+    private static int counter = 1;
 
-    private repetitionRate repetitionRate;
+    public Task(String title, String description, TaskType taskType, LocalDateTime taskTime) throws IllegalParemetrtException {
+        setTitle(title);
+        setDescription(description);
+        if (taskType != null) {
+            this.taskType = taskType;
+        } else {
+            throw new IllegalParemetrtException(" Тип задания ");
+        }
+        if (taskTime != null) {
+            this.taskTime = taskTime;
+        } else {
+            throw new IllegalParemetrtException(" Время задания ");
+        }
 
-    public Task(String title, boolean isItPrivateTask, String description, Task.repetitionRate repetitionRate) {
-        this.title = title;
-        this.isItPrivateTask = isItPrivateTask;
-        this.description = description;
-        this.creationDate = String.valueOf(LocalDate.now(Clock.systemDefaultZone()));//возможно есть опции для объединения времени и даты, нужно посмотреть ещё
-        this.creationTime = String.valueOf(LocalTime.now(Clock.systemDefaultZone()));
-        this.repetitionRate = repetitionRate;
         this.id = counter;
         counter++;
     }
     //создать метод дабавить таск и удалить таск
     //добавить интерфейс, чтобы переопределить значения для того что у меня в енамах и можно было поведение выставить
 
+    public TaskType getTaskType() {
+        return taskType;
+    }
+
+    public LocalDateTime getTaskTime() {
+        return taskTime;
+    }
+
+    public static void setCounter(int counter) {
+        Task.counter = counter;
+    }
+
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public boolean isItPrivateTask() {
-        return isItPrivateTask;
-    }
-
-    public String showCreationDateAndTime() {//чекнуть метод возможно работает некорректно
-        return creationDate + creationTime;
+    public void setTitle(String title) throws IllegalParemetrtException {
+        if (title != null && !title.isEmpty()) {
+            this.title = title;
+        } else {
+            throw new IllegalParemetrtException(" Заголовок задания ");
+        }
     }
 
     public static int getCounter() {
@@ -60,22 +73,29 @@ public abstract class Task {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Task.repetitionRate getRepetitionRate() {
-        return repetitionRate;
-    }
-
-    public void setRepetitionRate(Task.repetitionRate repetitionRate) {
-        this.repetitionRate = repetitionRate;
+    public void setDescription(String description) throws IllegalParemetrtException {
+        if (description != null && !description.isEmpty()) {
+            this.description = description;
+        } else {
+            throw new IllegalParemetrtException(" Описание задания ");
+        }
     }
 
     //оверрайд ту стинг (тегулярная булин на печать для типов ворк или прайвет таск)
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Task)) return false;
+        Task task = (Task) o;
+        return id == task.id && Objects.equals(title, task.title) && taskType == task.taskType && Objects.equals(taskTime, task.taskTime) && Objects.equals(description, task.description);
+    }
 
-    enum repetitionRate {
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, taskType, taskTime, description, id);
+    }
+/*    enum RepetitionRate {
 
         ONCE("однократная"),
         EVERYDAY("ежедневная"),
@@ -83,7 +103,8 @@ public abstract class Task {
         EVERY_MONTH("ежемесячная"),
         EVERY_YEAR("ежегодная");
         private final String repeatability;
-        repetitionRate(String repeatability) {
+
+        RepetitionRate(String repeatability) {
             this.repeatability = repeatability;
         }
 
@@ -95,5 +116,5 @@ public abstract class Task {
         public String toString() {
             return " частота повторений " + repeatability + ", ";
         }
-    }
+    }*/
 }
