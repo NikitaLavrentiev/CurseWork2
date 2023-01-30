@@ -1,6 +1,7 @@
 import Service.TaskManager;
 import Tasks.*;
 import exeptions.IllegalParemetrtException;
+import exeptions.IncorrectBooleanException;
 import exeptions.TaskNotFoundException;
 
 import java.time.LocalDate;
@@ -31,7 +32,7 @@ public class Main {
                             inputTask(scanner);
                             break;
                         case 2:
-                            toArchivate(scanner);
+                            addToArchive(scanner);
                             break;
                         case 3:
                             printAllByDate(scanner);
@@ -43,8 +44,8 @@ public class Main {
                             changeTitle(scanner, scanner);
                             break;
                         case 6:
-                            changeDescription(scanner,scanner);
-                            break; 
+                            changeDescription(scanner, scanner);
+                            break;
                         case 0:
                             break label;
                     }
@@ -55,129 +56,16 @@ public class Main {
             }
         } catch (TaskNotFoundException e) {
             throw new RuntimeException(e);
+        } catch (IncorrectBooleanException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    private static void changeTitle(Scanner scanner1, Scanner scanner2) throws TaskNotFoundException, IllegalParemetrtException { //сделать проверки и передавать параметры
-        System.out.println("Введите ID задачи");
-        Integer ID = scanner1.nextInt();
-        System.out.println("Введите новый заголовок");
-        String newTitle = scanner2.nextLine();
-
-        TASK_MANAGER.changeTitle(ID, newTitle);
-        System.out.println("Заголовок задачи с ID " + ID + " изменён на " + newTitle);
-
-    }   
-    private static void changeDescription(Scanner scanner1, Scanner scanner2) throws TaskNotFoundException, IllegalParemetrtException { //сделать проверки и передавать параметры
-        System.out.println("Введите ID задачи");
-        Integer ID = scanner1.nextInt();
-        System.out.println("Введите новое описание");
-        String newDescription = scanner2.nextLine();
-
-        TASK_MANAGER.changeDescription(ID, newDescription);
-        System.out.println("Заголовок задачи с ID " + ID + " изменён на " + newDescription);
-
-    }
-
-    private static void printAllArchived() {
-        System.out.println("Вывожу архивные задачи");
-        Collection<Task> deleted = TASK_MANAGER.getAllDeleted();//подумать над проверками
-        for (Task task : deleted
-        ) {
-            System.out.println(task);
-
-        }
-    }
-
-    private static void printAllByDate(Scanner scanner) {
-        System.out.print("Введите дату и время в формате dd.mm.yyyy ");
-
-        if (scanner.hasNext(DATE_PATTERN)) {
-            String dateTime = scanner.next(DATE_PATTERN);
-            LocalDate inputDate = LocalDate.parse(dateTime, DATE_FORMATTER);
-
-            Collection<Task> tasksByDay = TASK_MANAGER.getAllByDate(inputDate);
-            for (Task task : tasksByDay
-            ) {
-                System.out.println(task);
-            }
-        } else {
-            System.out.println("Введите дату и время в формате dd.mm.yyyy hh:mm ");
-             
-        }
-    }
-    
-
-    private static String inputTaskTitle(Scanner scanner) {
-        System.out.print("Введите название задачи: ");
-        String title = scanner.next();
-
-        if (title.isBlank()) {
-            System.out.print("Не указано название задачи");
-             
-        }
-        return title;
-
-    }
-
-    private static String inputTaskDescription(Scanner scanner) {
-        System.out.print("Введите описание задачи: ");
-        String description = scanner.next();
-
-        if (description.isBlank()) {
-            System.out.print("Не указано описание задачи");
-             
-        }
-        return description;
-    }
-
-    private static TaskType inputTaskType(Scanner scanner) {
-        System.out.print("Введите тип задачи(1 - личная, 2 - рабочая): ");
-        TaskType type = null;
-
-        int taskTypeSelection = scanner.nextInt();
-        switch (taskTypeSelection) {
-            case 1:
-                type = TaskType.PRIVATE;
-                break;
-            case 2:
-                type = TaskType.WORK;
-                break;
-            default:
-                System.out.println(" Не верно указан тип задачи ");
-                 
-        }
-        return type;
-    }
-
-    private static LocalDateTime inputTaskTime(Scanner scanner) {
-        System.out.print("Введите дату и время создания задачи в формате dd.mm.yyyy hh:mm ");
-
-        LocalDateTime taskTime = null;
-        if (scanner.hasNext(DATE_TIME_PATTERN)) {
-            String dateTime = scanner.next(DATE_TIME_PATTERN);
-            taskTime = LocalDateTime.parse(dateTime, DATE_TIME_FORMATTER);
-        } else {
-            System.out.println("Введите дату и время создания задачи в формате dd.mm.yyyy hh:mm ");
-             
-        }
-
-        if (taskTime == null) {
-            System.out.println("Введите дату и время создания задачи в формате dd.mm.yyyy hh:mm ");
-             
-        }
-
-        return taskTime;
-    }
-
-    private static Integer inputRepeatability(Scanner scanner) {
-        System.out.print("Введите повторяемость задачи(1 - однократно, 2 - ежедневно, 3 - еженедельно, 4 - ежемесячно, 5 - ежегодно): ");
-        if (scanner.hasNextInt()) {
-            return scanner.nextInt();
-        } else {
-            System.out.println("Введены число, из списка");
-        }
-        return null;
+    private static void printMenu() {
+        System.out.println();
+        System.out.println("1. Добавить задачу" + "\n2. Удалить задачу" + "\n3. Получить задачу на указанный день" +
+                "\n4. Получить список удалённых задач" + "\n5. Изменить название задачи " +
+                "\n.6 Изменить описание задачи" + "\n0. Выход");
     }
 
     private static void createTask(String title, String description, TaskType type, LocalDateTime taskTime, Integer repeatability) {
@@ -214,7 +102,129 @@ public class Main {
         }
     }
 
-    private static void toArchivate(Scanner scanner) {
+    private static void printAllByDate(Scanner scanner) {
+        System.out.print("Введите дату и время в формате dd.mm.yyyy ");
+
+        if (scanner.hasNext(DATE_PATTERN)) {
+            String dateTime = scanner.next(DATE_PATTERN);
+            LocalDate inputDate = LocalDate.parse(dateTime, DATE_FORMATTER);
+
+            Collection<Task> tasksByDay = TASK_MANAGER.getAllByDate(inputDate);
+            for (Task task : tasksByDay
+            ) {
+                System.out.println(task);
+            }
+        } else {
+            System.out.println("Введите дату и время в формате dd.mm.yyyy hh:mm ");
+
+        }
+    }
+
+    private static void printAllArchived() throws IncorrectBooleanException {
+        System.out.println("Вывожу архивные задачи");
+        Collection<Task> deleted = TASK_MANAGER.getAllDeleted();//подумать над проверками
+        for (Task task : deleted
+        ) {
+            System.out.println(task);
+
+        }
+    }
+
+    private static void changeTitle(Scanner scanner1, Scanner scanner2) throws TaskNotFoundException, IllegalParemetrtException { //сделать проверки и передавать параметры
+        System.out.println("Введите ID задачи");
+        Integer ID = scanner1.nextInt();
+        System.out.println("Введите новый заголовок");
+        String newTitle = scanner2.nextLine();
+
+        TASK_MANAGER.changeTitle(ID, newTitle);
+        System.out.println("Заголовок задачи с ID " + ID + " изменён на " + newTitle);
+
+    }
+
+    private static void changeDescription(Scanner scanner1, Scanner scanner2) throws TaskNotFoundException, IllegalParemetrtException { //сделать проверки и передавать параметры
+        System.out.println("Введите ID задачи");
+        Integer ID = scanner1.nextInt();
+        System.out.println("Введите новое описание");
+        String newDescription = scanner2.nextLine();
+
+        TASK_MANAGER.changeDescription(ID, newDescription);
+        System.out.println("Заголовок задачи с ID " + ID + " изменён на " + newDescription);
+
+    }
+
+    private static String inputTaskTitle(Scanner scanner) {
+        System.out.print("Введите название задачи: ");
+        String title = scanner.next();
+
+        if (title.isBlank()) {
+            System.out.print("Не указано название задачи");
+
+        }
+        return title;
+
+    }
+
+    private static String inputTaskDescription(Scanner scanner) {
+        System.out.print("Введите описание задачи: ");
+        String description = scanner.next();
+
+        if (description.isBlank()) {
+            System.out.print("Не указано описание задачи");
+
+        }
+        return description;
+    }
+
+    private static TaskType inputTaskType(Scanner scanner) {
+        System.out.print("Введите тип задачи(1 - личная, 2 - рабочая): ");
+        TaskType type = null;
+
+        int taskTypeSelection = scanner.nextInt();
+        switch (taskTypeSelection) {
+            case 1:
+                type = TaskType.PRIVATE;
+                break;
+            case 2:
+                type = TaskType.WORK;
+                break;
+            default:
+                System.out.println(" Не верно указан тип задачи ");
+
+        }
+        return type;
+    }
+
+    private static LocalDateTime inputTaskTime(Scanner scanner) {
+        System.out.print("Введите дату и время создания задачи в формате dd.mm.yyyy hh:mm ");
+
+        LocalDateTime taskTime = null;
+        if (scanner.hasNext(DATE_TIME_PATTERN)) {
+            String dateTime = scanner.next(DATE_TIME_PATTERN);
+            taskTime = LocalDateTime.parse(dateTime, DATE_TIME_FORMATTER);
+        } else {
+            System.out.println("Введите дату и время создания задачи в формате dd.mm.yyyy hh:mm ");
+
+        }
+
+        if (taskTime == null) {
+            System.out.println("Введите дату и время создания задачи в формате dd.mm.yyyy hh:mm ");
+
+        }
+
+        return taskTime;
+    }
+
+    private static Integer inputRepeatability(Scanner scanner) {
+        System.out.print("Введите повторяемость задачи(1 - однократно, 2 - ежедневно, 3 - еженедельно, 4 - ежемесячно, 5 - ежегодно): ");
+        if (scanner.hasNextInt()) {
+            return scanner.nextInt();
+        } else {
+            System.out.println("Введены число, из списка");
+        }
+        return null;
+    }
+
+    private static void addToArchive(Scanner scanner) {
         System.out.println("Введите ID задачи для архивации");
         try {
             Integer ID = scanner.nextInt();
@@ -237,12 +247,5 @@ public class Main {
         createTask(title, description, type, taskTime, repeatability);
     }
 
-
-    private static void printMenu() {
-        System.out.println();
-        System.out.println("1. Добавить задачу" + "\n2. Удалить задачу" + "\n3. Получить задачу на указанный день" +
-                "\n4. Получить список удалённых задач" + "\n5. Распечатать все задачи в архиве" +
-                 "\n6. Изменить название задачи " + "\n7. Изменить описание задачи" + "\n0. Выход");
-    }
 }
 

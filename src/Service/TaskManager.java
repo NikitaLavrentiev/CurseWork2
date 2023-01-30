@@ -2,6 +2,7 @@ package Service;
 
 import Tasks.Task;
 import exeptions.IllegalParemetrtException;
+import exeptions.IncorrectBooleanException;
 import exeptions.TaskNotFoundException;
 
 import java.time.LocalDate;
@@ -37,6 +38,7 @@ public class TaskManager {
             throw new TaskNotFoundException(ID);
         }
     }
+
     public void changeDescription(Integer ID, String description) throws TaskNotFoundException, IllegalParemetrtException {
         if (taskMap.containsKey(ID)) {
             if (description != null && !description.isBlank()) {
@@ -74,7 +76,7 @@ public class TaskManager {
         return taskByDay;
     }
 
-    public Collection<Task> getAllDeleted() {
+    public Collection<Task> getAllDeleted() throws IncorrectBooleanException {
         Collection<Task> deleted = new ArrayList<>();
 
         for (Task task :
@@ -83,6 +85,8 @@ public class TaskManager {
 
             if (b == true) {
                 deleted.add(task);
+            } else {
+                throw new IncorrectBooleanException(b);
             }
         }
         return deleted;
