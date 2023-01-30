@@ -31,10 +31,16 @@ public class Main {
                             inputTask(scanner);
                             break;
                         case 2:
-                            removeTask(scanner);
+                            archivate(scanner);
                             break;
                         case 3:
                             printAllByDate(scanner);
+                            break;
+                        case 4:
+                            printAllArchived();
+                            break;
+                        case 5:
+                            changer(scanner);
                             break;
                         case 0:
                             break label;
@@ -47,21 +53,69 @@ public class Main {
         }
     }
 
-    private static void printAllByDate(Scanner scanner) {
-        System.out.print("Введите дату и время в формате dd.mm.yyyy ");
+    /*private static void changer(Scanner scanner) { //сделать проверки и передавать параметры
+        System.out.println("Введите ID задачи");
+        try {
+            Integer ID = scanner.nextInt();
+        } catch (TaskNotFoundException e) {
+            System.out.println(e.getMessage());
 
-        if (scanner.hasNext(DATE_PATTERN)) {
-            String dateTime = scanner.next(DATE_PATTERN);
-            LocalDate inputDate = LocalDate.parse(dateTime, DATE_FORMATTER);
+            System.out.println("Введите новый заголовок");
+            String title = scanner.nextLine();
+            taskManager.changeTitle(ID,title);
+            System.out.println("Задача номер " + ID + " перемещена в архив");
 
-            Collection<Task> tasksByDay = taskManager.getAllByDate(inputDate);
-            for (Task task: tasksByDay
-                 ) {
-                System.out.println(task);
+        } catch (IllegalParemetrtException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+                taskManager.changeDescription(ID);
+                System.out.println("Задача номер " + ID + " перемещена в архив");
+            } catch (TaskNotFoundException e) {
+                System.out.println(e.getMessage());
             }
-        } else {
-            System.out.println("Введите дату и время в формате dd.mm.yyyy hh:mm ");
-            scanner.close();
+             }*/
+
+    /*  int taskTypeSelection = scanner.nextInt();
+        switch (taskTypeSelection) {
+            case 1:
+                type = TaskType.PRIVATE;
+                break;
+            case 2:
+                type = TaskType.WORK;
+                break;
+            default:
+                System.out.println(" Не верно указан тип задачи ");
+                scanner.close();
+
+        }*/
+        private static void printAllArchived () {
+            System.out.println("Вывожу архивные задачи");
+            Collection<Task> deleted = taskManager.getAllDeleted();//подумать над проверками
+            for (Task task : deleted
+            ) {
+                System.out.println(task);
+
+            }
+        }
+
+        private static void printAllByDate (Scanner scanner){
+            System.out.print("Введите дату и время в формате dd.mm.yyyy ");
+
+            if (scanner.hasNext(DATE_PATTERN)) {
+                String dateTime = scanner.next(DATE_PATTERN);
+                LocalDate inputDate = LocalDate.parse(dateTime, DATE_FORMATTER);
+
+                Collection<Task> tasksByDay = taskManager.getAllByDate(inputDate);
+                for (Task task : tasksByDay
+                ) {
+                    System.out.println(task);
+                }
+            } else {
+                System.out.println("Введите дату и время в формате dd.mm.yyyy hh:mm ");
+                scanner.close();
+            }
         }
     }
 
@@ -171,12 +225,12 @@ public class Main {
         }
     }
 
-    private static void removeTask(Scanner scanner) {
-        System.out.println("Введите ID задачи для удаления");
+    private static void archivate(Scanner scanner) {
+        System.out.println("Введите ID задачи для архивации");
         try {
             Integer ID = scanner.nextInt();
-            taskManager.remove(ID);
-            System.out.println("Задача номер " + ID + " удалена" );
+            taskManager.toArchive(ID);
+            System.out.println("Задача номер " + ID + " перемещена в архив" );
         } catch (TaskNotFoundException e) {
             System.out.println(e.getMessage());
         }
@@ -196,10 +250,8 @@ public class Main {
 
 
     private static void printMenu() {
-        System.out.println("1. Добавить задачу");
-        System.out.println("2. Удалить задачу");
-        System.out.println("3. Получить задачу на указанный день");
-        System.out.println("0. Выход");
+        System.out.println();
+        System.out.println("1. Добавить задачу" +"\n2. Удалить задачу" + "\n3. Получить задачу на указанный день" + "\n4. Получить список удалённых задач" +"\n5. Изменить параметры задачи" + "\n0. Выход");
     }
 }
 

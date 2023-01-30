@@ -2,6 +2,7 @@ package Tasks;
 
 import exeptions.IllegalParemetrtException;
 
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -11,6 +12,7 @@ public abstract class Task implements Repeatable {
     private LocalDateTime taskTime;
     private String description;
     private final Integer ID;
+    private boolean isDeleted; //булин для архива
     private static int counter = 1;
 
     public Task(String title, String description, TaskType taskType, LocalDateTime taskTime) throws IllegalParemetrtException {
@@ -18,8 +20,17 @@ public abstract class Task implements Repeatable {
         setDescription(description);
         setTaskType(taskType);
         setTaskTime(taskTime);
+        this.isDeleted = false;
         this.ID = counter;
         counter++;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 
     public void setTaskType(TaskType taskType) throws IllegalParemetrtException {
@@ -87,7 +98,7 @@ public abstract class Task implements Repeatable {
     public String toString() {
         return "Задние номер " + ID +
                 " название " + title +
-                ", тип " + taskType +
+                ", тип " + taskType + " в архиве " + isDeleted +
                 ", время создания " + taskTime +
                 ", описание " + description;
     }
