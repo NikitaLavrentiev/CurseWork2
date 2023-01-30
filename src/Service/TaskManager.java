@@ -25,6 +25,7 @@ public class TaskManager {
             throw new TaskNotFoundException(ID);
         }
     }
+
     public void changeTitle(Integer ID, String title) throws TaskNotFoundException, IllegalParemetrtException {
         if (taskMap.containsKey(ID)) {
             if (title != null && !title.isBlank()) {
@@ -36,11 +37,10 @@ public class TaskManager {
             throw new TaskNotFoundException(ID);
         }
     }
-
     public void changeDescription(Integer ID, String description) throws TaskNotFoundException, IllegalParemetrtException {
         if (taskMap.containsKey(ID)) {
             if (description != null && !description.isBlank()) {
-                this.taskMap.get(ID).setTitle(description);// меняет описание;
+                this.taskMap.get(ID).setDescription(description);// меняет описание;
             } else {
                 throw new IllegalParemetrtException(description);
             }
@@ -48,6 +48,7 @@ public class TaskManager {
             throw new TaskNotFoundException(ID);
         }
     }
+
 
     public Collection<Task> getAllByDate(LocalDate date) {
         Collection<Task> taskByDay = new ArrayList<>();
