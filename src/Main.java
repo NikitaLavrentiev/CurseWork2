@@ -54,9 +54,7 @@ public class Main {
                     System.out.println("Выберите пункт меню из списка!");
                 }
             }
-        } catch (TaskNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IncorrectBooleanException e) {
+        } catch (TaskNotFoundException | IncorrectBooleanException e) {
             throw new RuntimeException(e);
         }
     }

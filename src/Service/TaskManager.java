@@ -21,7 +21,7 @@ public class TaskManager {
 
     public void toArchive(Integer ID) throws TaskNotFoundException {
         if (taskMap.containsKey(ID)) {
-            this.taskMap.get(ID).setDeleted(true);// переносит в архив таск;
+            this.taskMap.get(ID).setDeleted(true);// переносит в архив задание;
         } else {
             throw new TaskNotFoundException(ID);
         }
@@ -59,13 +59,14 @@ public class TaskManager {
                 taskMap.values()) {
             LocalDateTime taskTime = task.getTaskTime();
             LocalDateTime taskNextTime = task.getRepeatTime(taskTime);
+            boolean deletedTask = task.isDeleted();
 
-            if (taskNextTime == null || taskTime.toLocalDate().equals(date)) {
+            if ((taskNextTime == null || taskTime.toLocalDate().equals(date)) && !deletedTask) {
                 taskByDay.add(task);
                 continue;
             }
             do {
-                if (taskNextTime.toLocalDate().equals(date)) {
+                if (taskNextTime != null && taskNextTime.toLocalDate().equals(date)) {
                     taskByDay.add(task);
                     break;
                 }
@@ -83,7 +84,7 @@ public class TaskManager {
                 taskMap.values()) {
             boolean b = task.isDeleted();
 
-            if (b == true) {
+            if (b) {
                 deleted.add(task);
             } else {
                 throw new IncorrectBooleanException(b);
