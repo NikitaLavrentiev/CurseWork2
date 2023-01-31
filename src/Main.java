@@ -11,7 +11,7 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class Main {
-    private static final TaskManager taskManager = new TaskManager();
+    private static final TaskManager TASK_MANAGER = new TaskManager();
     private static final Pattern DATE_TIME_PATTERN = Pattern.compile("\\d{2}.\\d{2}.\\d{4} \\d{2}:\\d{2}");
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
     private static final Pattern DATE_PATTERN = Pattern.compile("\\d{2}.\\d{2}.\\d{4}");
@@ -54,14 +54,14 @@ public class Main {
             String dateTime = scanner.next(DATE_PATTERN);
             LocalDate inputDate = LocalDate.parse(dateTime, DATE_FORMATTER);
 
-            Collection<Task> tasksByDay = taskManager.getAllByDate(inputDate);
+            Collection<Task> tasksByDay = TASK_MANAGER.getAllByDate(inputDate);
             for (Task task: tasksByDay
                  ) {
                 System.out.println(task);
             }
         } else {
             System.out.println("Введите дату и время в формате dd.mm.yyyy hh:mm ");
-            scanner.close();
+
         }
     }
 
@@ -71,7 +71,6 @@ public class Main {
 
         if (title.isBlank()) {
             System.out.print("Не указано название задачи");
-            scanner.close();
         }
         return title;
 
@@ -83,7 +82,6 @@ public class Main {
 
         if (description.isBlank()) {
             System.out.print("Не указано описание задачи");
-            scanner.close();
         }
         return description;
     }
@@ -102,7 +100,6 @@ public class Main {
                 break;
             default:
                 System.out.println(" Не верно указан тип задачи ");
-                scanner.close();
         }
         return type;
     }
@@ -111,17 +108,13 @@ public class Main {
         System.out.print("Введите дату и время создания задачи в формате dd.mm.yyyy hh:mm ");
 
         LocalDateTime taskTime = null;
-        if (scanner.hasNext(DATE_TIME_PATTERN)) {
-            String dateTime = scanner.next(DATE_TIME_PATTERN);
-            taskTime = LocalDateTime.parse(dateTime, DATE_TIME_FORMATTER);
-        } else {
-            System.out.println("Введите дату и время создания задачи в формате dd.mm.yyyy hh:mm ");
-            scanner.close();
-        }
-
-        if (taskTime == null) {
-            System.out.println("Введите дату и время создания задачи в формате dd.mm.yyyy hh:mm ");
-            scanner.close();
+        while (taskTime == null) {
+            if (scanner.hasNext(DATE_TIME_PATTERN)) {
+                String dateTime = scanner.next(DATE_TIME_PATTERN);
+                taskTime = LocalDateTime.parse(dateTime, DATE_TIME_FORMATTER);
+            } else {
+                System.out.println("Введите дату и время создания задачи в формате dd.mm.yyyy hh:mm ");
+            }
         }
 
         return taskTime;
@@ -161,10 +154,10 @@ public class Main {
 
             }
         } catch (IllegalParemetrtException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException (" Введены некорректные данные ");
         }
         if (task != null) {
-            taskManager.add(task);
+            TASK_MANAGER.add(task);
             System.out.println("Задача добавлена");
         } else {
             System.out.println("Введены некорректные значения");
@@ -175,7 +168,7 @@ public class Main {
         System.out.println("Введите ID задачи для удаления");
         try {
             Integer ID = scanner.nextInt();
-            taskManager.remove(ID);
+            TASK_MANAGER.remove(ID);
             System.out.println("Задача номер " + ID + " удалена" );
         } catch (TaskNotFoundException e) {
             System.out.println(e.getMessage());

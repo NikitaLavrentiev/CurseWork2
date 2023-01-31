@@ -2,6 +2,7 @@ package Tasks;
 
 import exeptions.IllegalParemetrtException;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class YearlyTask extends Task implements Repeatable{
@@ -10,7 +11,7 @@ public class YearlyTask extends Task implements Repeatable{
     }
 
     @Override
-    public LocalDateTime getRepeatTime(LocalDateTime dateTime) {
+    public LocalDate getRepeatTime(LocalDate dateTime) {
         return dateTime.plusYears(1);
     }
 }

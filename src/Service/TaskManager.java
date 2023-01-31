@@ -4,7 +4,6 @@ import Tasks.Task;
 import exeptions.TaskNotFoundException;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -14,7 +13,7 @@ public class TaskManager {
     private final Map<Integer, Task> taskMap = new HashMap<>();
 
     public void add(Task task) {
-        this.taskMap.put(task.getID(),task);
+        this.taskMap.put(task.getId(),task);
     }
 
     public void remove(Integer ID) throws TaskNotFoundException {
@@ -30,20 +29,20 @@ public class TaskManager {
 
         for (Task task :
                 taskMap.values()) {
-            LocalDateTime taskTime = task.getTaskTime();
-            LocalDateTime taskNextTime = task.getRepeatTime(taskTime);
+            LocalDate taskTime = LocalDate.from(task.getTaskTime());
+            LocalDate taskNextTime = task.getRepeatTime(taskTime);
 
-            if (taskNextTime == null || taskTime.toLocalDate().equals(date)) {
+            if (taskNextTime == null || taskTime.equals(date)) {
                 taskByDay.add(task);
                 continue;
             }
             do {
-                if (taskNextTime.toLocalDate().equals(date)) {
+                if (taskNextTime.equals(date)) {
                     taskByDay.add(task);
                     break;
                 }
                 taskNextTime = task.getRepeatTime(taskNextTime);
-            } while (taskNextTime.toLocalDate().isBefore(date));
+            } while (taskNextTime.isBefore(date));
             
         }
         return taskByDay;

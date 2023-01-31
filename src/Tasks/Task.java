@@ -10,7 +10,7 @@ public abstract class Task implements Repeatable {
     private TaskType taskType;
     private LocalDateTime taskTime;
     private String description;
-    private final Integer ID;
+    private final Integer id;
     private static int counter = 1;
 
     public Task(String title, String description, TaskType taskType, LocalDateTime taskTime) throws IllegalParemetrtException {
@@ -18,7 +18,7 @@ public abstract class Task implements Repeatable {
         setDescription(description);
         setTaskType(taskType);
         setTaskTime(taskTime);
-        this.ID = counter;
+        this.id = counter;
         counter++;
     }
 
@@ -38,8 +38,8 @@ public abstract class Task implements Repeatable {
         }
     }
 
-    public Integer getID() {
-        return ID;
+    public Integer getId() {
+        return id;
     }
 
     public TaskType getTaskType() {
@@ -48,10 +48,6 @@ public abstract class Task implements Repeatable {
 
     public LocalDateTime getTaskTime() {
         return taskTime;
-    }
-
-    public static void setCounter(Integer counter) {
-        Task.counter = counter;
     }
 
     public String getTitle() {
@@ -64,10 +60,6 @@ public abstract class Task implements Repeatable {
         } else {
             throw new IllegalParemetrtException(" Заголовок задания ");
         }
-    }
-
-    public static int getCounter() {
-        return counter;
     }
 
 
@@ -85,7 +77,7 @@ public abstract class Task implements Repeatable {
 
     @Override
     public String toString() {
-        return "Задние номер " + ID +
+        return "Задние номер " + id +
                 " название " + title +
                 ", тип " + taskType +
                 ", время создания " + taskTime +
@@ -97,11 +89,11 @@ public abstract class Task implements Repeatable {
         if (this == o) return true;
         if (!(o instanceof Task)) return false;
         Task task = (Task) o;
-        return title.equals(task.title) && taskType == task.taskType && taskTime.equals(task.taskTime) && description.equals(task.description) && ID.equals(task.ID);
+        return title.equals(task.title) && taskType == task.taskType && taskTime.equals(task.taskTime) && description.equals(task.description) && id.equals(task.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, taskType, taskTime, description, ID);
+        return Objects.hash(title, taskType, taskTime, description, id);
     }
 }
