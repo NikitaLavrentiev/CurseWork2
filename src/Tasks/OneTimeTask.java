@@ -2,15 +2,15 @@ package Tasks;
 
 import exeptions.IllegalParemetrtException;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class OneTimeTask extends Task implements Repeatable{
-    public OneTimeTask(String title, String description, TaskType taskType, LocalDateTime taskTime) throws IllegalParemetrtException {
+    public OneTimeTask(String title, String description, TaskType taskType, LocalDate taskTime) throws IllegalParemetrtException {
         super(title, description, taskType, taskTime);
     }
 
     @Override
-    public LocalDateTime getRepeatTime(LocalDateTime dateTime) {
+    public LocalDate getRepeatTime(LocalDate dateTime) {
         return null;
     }
 }

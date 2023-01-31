@@ -2,18 +2,18 @@ package Tasks;
 
 import exeptions.IllegalParemetrtException;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Objects;
 
 public abstract class Task implements Repeatable {
     private String title;
     private TaskType taskType;
-    private LocalDateTime taskTime;
+    private LocalDate taskTime;
     private String description;
     private final Integer id;
     private static int counter = 1;
 
-    public Task(String title, String description, TaskType taskType, LocalDateTime taskTime) throws IllegalParemetrtException {
+    public Task(String title, String description, TaskType taskType, LocalDate taskTime) throws IllegalParemetrtException {
         setTitle(title);
         setDescription(description);
         setTaskType(taskType);
@@ -30,7 +30,7 @@ public abstract class Task implements Repeatable {
         }
     }
 
-    public void setTaskTime(LocalDateTime taskTime) throws IllegalParemetrtException {
+    public void setTaskTime(LocalDate taskTime) throws IllegalParemetrtException {
         if (taskTime != null) {
             this.taskTime = taskTime;
         } else {
@@ -46,7 +46,7 @@ public abstract class Task implements Repeatable {
         return taskType;
     }
 
-    public LocalDateTime getTaskTime() {
+    public LocalDate getTaskTime() {
         return taskTime;
     }
 

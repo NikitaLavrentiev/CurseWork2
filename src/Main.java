@@ -71,6 +71,7 @@ public class Main {
 
         if (title.isBlank()) {
             System.out.print("Не указано название задачи");
+            scanner.close();
         }
         return title;
 
@@ -154,7 +155,7 @@ public class Main {
 
             }
         } catch (IllegalParemetrtException e) {
-            throw new RuntimeException (" Введены некорректные данные ");
+            throw new RuntimeException(e);
         }
         if (task != null) {
             TASK_MANAGER.add(task);

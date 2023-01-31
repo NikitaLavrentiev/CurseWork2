@@ -11,7 +11,7 @@ public class YearlyTask extends Task implements Repeatable{
     }
 
     @Override
-    public LocalDate getRepeatTime(LocalDate dateTime) {
+    public LocalDateTime getRepeatTime(LocalDateTime dateTime) {
         return dateTime.plusYears(1);
     }
 }
